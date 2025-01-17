@@ -26,7 +26,7 @@ export default function OnboardingForm() {
   const [started, setStarted] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
-  const [aiResponse, setAIResponse] = useState('')
+  const [aiResponse, setAIResponse] = useState<{ text: string; audioBase64: string } | null>(null)
   const [isTyping, setIsTyping] = useState(false)
   const [direction, setDirection] = useState(0)
   const [isComplete, setIsComplete] = useState(false)
@@ -53,7 +53,7 @@ export default function OnboardingForm() {
     if (currentStep < questions.length - 1) {
       setDirection(1)
       setCurrentStep(prev => prev + 1)
-      setAIResponse('')
+      setAIResponse(null)
       setCurrentInput('')
       setIsTyping(false)
     } else {

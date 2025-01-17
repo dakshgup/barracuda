@@ -1,36 +1,61 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface AIReactionProps {
-  response: string
+  response: { text: string; audioBase64: string } | null
   isTyping: boolean
 }
 
 export default function AIReaction({ response, isTyping }: AIReactionProps) {
   const [displayedResponse, setDisplayedResponse] = useState('')
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const audioContextRef = useRef<AudioContext | null>(null)
+  const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null)
 
   useEffect(() => {
-    if (!response) {
+    if (!response?.text) {
       setDisplayedResponse('')
       return
     }
 
-    let i = 0
-    const intervalId = setInterval(() => {
-      setDisplayedResponse(response.slice(0, i))
-      i++
-      if (i > response.length) {
+    // Initialize audio
+    if (response.audioBase64) {
+      const audio = new Audio(`data:audio/mp3;base64,${response.audioBase64}`)
+      audioRef.current = audio
+      
+      // Calculate timing for audio playback
+      const msPerChar = (audio.duration * 1000) / response.text.length
+      
+      let i = 0
+      const intervalId = setInterval(() => {
+        setDisplayedResponse(response.text.slice(0, i))
+        
+        // Start audio if it's the first character
+        if (i === 1) {
+          audioRef.current?.play()
+        }
+        
+        i++
+        if (i > response.text.length) {
+          clearInterval(intervalId)
+        }
+      }, msPerChar)
+
+      return () => {
         clearInterval(intervalId)
+        if (audioRef.current) {
+          audioRef.current.pause()
+          audioRef.current.currentTime = 0
+        }
       }
-    }, 20)
-    return () => clearInterval(intervalId)
+    }
   }, [response])
 
   return (
     <AnimatePresence mode="wait">
       {(isTyping || displayedResponse) && (
         <motion.div
-          key={response}
+          key={response?.text}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}

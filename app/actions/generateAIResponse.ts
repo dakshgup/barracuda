@@ -2,6 +2,12 @@
 
 import { generateText } from 'ai'
 import { openai } from '@ai-sdk/openai'
+import OpenAI from 'openai'
+
+// Initialize OpenAI client
+const openaiClient = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+})
 
 export async function generateAIResponse(question: string, answer: string) {
   const prompt = `
@@ -12,7 +18,7 @@ export async function generateAIResponse(question: string, answer: string) {
     Question: ${question}
     User's Answer: ${answer}
     
-    Respond in 1-2 statements with your Southern charm, making specific references or connections
+    Respond 1 statement with your Southern charm, making specific references or connections
     to their answer. If they mention an address, share a comment about a nearby spot you know.
     If they mention an occupation, mention your cousin who does that job. Keep it warm,
     chatty and personal, like you're having a friendly conversation at your desk. Use phrases
@@ -25,6 +31,21 @@ export async function generateAIResponse(question: string, answer: string) {
     prompt: prompt,
   })
 
-  return text
+  // Generate speech audio
+  const speechResponse = await openaiClient.audio.speech.create({
+    model: "tts-1",
+    voice: "shimmer",
+    input: text,
+    speed: 1.2
+  })
+
+  // Convert audio to base64
+  const audioBuffer = Buffer.from(await speechResponse.arrayBuffer())
+  const audioBase64 = audioBuffer.toString('base64')
+
+  return {
+    text,
+    audioBase64
+  }
 }
 
