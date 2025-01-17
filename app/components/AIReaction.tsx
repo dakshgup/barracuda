@@ -10,23 +10,27 @@ export default function AIReaction({ response, isTyping }: AIReactionProps) {
   const [displayedResponse, setDisplayedResponse] = useState('')
 
   useEffect(() => {
-    if (response) {
-      let i = 0
-      const intervalId = setInterval(() => {
-        setDisplayedResponse(response.slice(0, i))
-        i++
-        if (i > response.length) {
-          clearInterval(intervalId)
-        }
-      }, 20)
-      return () => clearInterval(intervalId)
+    if (!response) {
+      setDisplayedResponse('')
+      return
     }
+
+    let i = 0
+    const intervalId = setInterval(() => {
+      setDisplayedResponse(response.slice(0, i))
+      i++
+      if (i > response.length) {
+        clearInterval(intervalId)
+      }
+    }, 20)
+    return () => clearInterval(intervalId)
   }, [response])
 
   return (
-    <AnimatePresence>
-      {(isTyping || response) && (
+    <AnimatePresence mode="wait">
+      {(isTyping || displayedResponse) && (
         <motion.div
+          key={response}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
