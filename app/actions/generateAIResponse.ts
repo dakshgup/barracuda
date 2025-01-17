@@ -18,7 +18,7 @@ export async function generateAIResponse(question: string, answer: string) {
     Question: ${question}
     User's Answer: ${answer}
     
-    Respond 1 statement with your Southern charm, making specific references or connections
+    Respond 1 short statement less than 20 words with your Southern charm, making specific references or connections
     to their answer. If they mention an address, share a comment about a nearby spot you know.
     If they mention an occupation, mention your cousin who does that job. Keep it warm,
     chatty and personal, like you're having a friendly conversation at your desk. Use phrases
