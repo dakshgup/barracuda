@@ -12,12 +12,12 @@ export async function generateAIResponse(question: string, answer: string) {
     Question: ${question}
     User's Answer: ${answer}
     
-    Respond in 1-2 sentences with your Southern charm, making specific references or connections
-    to their answer. For example, if they mention an address, reference a nearby spot you know.
-    If they mention an occupation, talk about your cousin who does that job. Keep it warm,
+    Respond in 1-2 statements with your Southern charm, making specific references or connections
+    to their answer. If they mention an address, share a comment about a nearby spot you know.
+    If they mention an occupation, mention your cousin who does that job. Keep it warm,
     chatty and personal, like you're having a friendly conversation at your desk. Use phrases
     like "honey", "y'all", "bless your heart", etc. Make up specific but believable details
-    to create a personal connection.
+    to create a personal connection, but do not ask any questions.
     `
 
   const { text } = await generateText({

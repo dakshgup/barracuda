@@ -8,15 +8,22 @@ import { Textarea } from "@/components/ui/textarea"
 import AIReaction from './components/AIReaction'
 import { generateAIResponse } from './actions/generateAIResponse'
 import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowRightIcon } from '@radix-ui/react-icons'
 
 const questions = [
   { id: 'name', question: "What's your name?", type: 'input' },
-  { id: 'role', question: "What's your home address?", type: 'input' },
-  { id: 'goals', question: "What's your occupation?", type: 'textarea' },
-  { id: 'experience', question: "How old are you?", type: 'textarea' },
+  { id: 'company', question: "What company do you work for?", type: 'input' },
+  { id: 'role', question: "What's your role at the company?", type: 'input' },
+  { id: 'teamSize', question: "How many people are on your team?", type: 'input' },
+  { id: 'useCase', question: "What problem are you trying to solve with our product?", type: 'textarea' },
+  { id: 'goals', question: "What are your main goals for using our platform?", type: 'textarea' },
+  { id: 'integration', question: "What tools does your team currently use that you'd like to integrate with?", type: 'textarea' },
+  { id: 'timeline', question: "When are you looking to get started?", type: 'input' },
+  { id: 'features', question: "Which features are most important to you?", type: 'textarea' },
 ]
 
 export default function OnboardingForm() {
+  const [started, setStarted] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [aiResponse, setAIResponse] = useState('')
@@ -96,8 +103,36 @@ export default function OnboardingForm() {
     )
   }
 
+  if (!started) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100">
+        <div className="text-center space-y-8 max-w-lg px-4">
+          <h1 className="text-5xl font-bold tracking-tight font-mono">
+            Enterprise Interest Form
+          </h1>
+          <div className="relative">
+            <div className="absolute -inset-1 bg-gray-200 rounded-lg blur opacity-25"></div>
+            <img 
+              src="/v0.png" 
+              alt="Enterprise Logo" 
+              className="relative w-72 h-auto mx-auto drop-shadow-xl"
+            />
+          </div>
+          <Button 
+            onClick={() => setStarted(true)}
+            size="lg"
+            className="mt-12 bg-gray-900 text-white shadow-lg hover:shadow-xl transition-all duration-200 px-8 py-6 text-lg"
+          >
+            Get Started
+            <ArrowRightIcon className="ml-2 h-5 w-5" />
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 overflow-hidden relative">
+    <div className="min-h-screen flex items-start justify-center bg-gray-100 overflow-hidden relative pt-16">
       {!isTyping && aiResponse && (
         <Button 
           onClick={handleNext}
