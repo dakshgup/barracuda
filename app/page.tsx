@@ -16,10 +16,7 @@ const questions = [
   { id: 'role', question: "What's your role at the company?", type: 'input' },
   { id: 'teamSize', question: "How many people are on your team?", type: 'input' },
   { id: 'useCase', question: "What problem are you trying to solve with our product?", type: 'textarea' },
-  { id: 'goals', question: "What are your main goals for using our platform?", type: 'textarea' },
-  { id: 'integration', question: "What tools does your team currently use that you'd like to integrate with?", type: 'textarea' },
-  { id: 'timeline', question: "When are you looking to get started?", type: 'input' },
-  { id: 'features', question: "Which features are most important to you?", type: 'textarea' },
+  { id: 'source', question: "How did you hear about us?", type: 'input' },
 ]
 
 export default function OnboardingForm() {
